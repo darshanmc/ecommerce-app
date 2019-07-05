@@ -1,26 +1,29 @@
 <template>
   <div class="about">
-    <v-content>
-      <h1>Products</h1>
+    <v-container fluid grid-list-md>
+      <v-layout row wrap align-center>
+        <v-flex xs12 md3 offset-sm1 v-for="product in products" :key="product.id">
+          <v-card>
+            <v-img src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" height="150px"></v-img>
 
-      <v-layout>
-        <v-flex xs12 sm6 offset-sm3>
-          <v-card v-for="product in products" :key="product.id">
             <v-card-title primary-title>
               <div>
-                <h3 class="headline mb-0">{{ product.name }}</h3>
-                <h4>{{ product.price }}</h4>
-                <h4>{{ product.stock }}</h4>
+                <div class="headline">{{ product.name }}</div>
+                <span class="grey--text">Rs. {{ product.price }}</span>
+                <div class="grey--text">Remaining: {{ product.stock }}</div>
               </div>
             </v-card-title>
 
             <v-card-actions>
-              <v-btn flat color="orange">Add to cart</v-btn>
+              <v-btn icon large v-on:click="addItem(product)">
+                <v-icon>add_shopping_cart</v-icon>
+              </v-btn>
+              <v-spacer></v-spacer>
             </v-card-actions>
           </v-card>
         </v-flex>
       </v-layout>
-    </v-content>
+    </v-container>
   </div>
 </template>
 
@@ -33,22 +36,33 @@ export default {
       products: []
     };
   },
-  methods: {},
-  created() {
-    db.collection("products")
-      .get()
-      .then(snapshot => {
-        snapshot.docs.forEach(doc => {
-          const data = {
-            id: doc.id,
-            name: doc.data().name,
-            price: doc.data().price,
-            stock: doc.data().stock
-          };
+  methods: {
+    loadProducts: function() {
+      db.collection("products")
+        .get()
+        .then(snapshot => {
+          snapshot.docs.forEach(doc => {
+            const data = {
+              id: doc.id,
+              name: doc.data().name,
+              price: doc.data().price,
+              stock: doc.data().stock
+            };
 
-          this.products.push(data);
+            this.products.push(data);
+          });
         });
-      });
+    },
+    addItem: function(product) {
+      this.$store.dispatch("addCartItem", product);
+    }
+  },
+  created() {
+    this.products = this.$store.state.products;
+    if (this.products.length === 0) {
+      this.loadProducts();
+      this.$store.dispatch("addProducts", this.products);
+    }
   }
 };
 </script>
