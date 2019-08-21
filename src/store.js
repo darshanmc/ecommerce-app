@@ -8,7 +8,8 @@ export default new Vuex.Store({
     products: [],
     cartItem: 0,
     productsInCart: [],
-    displayName: null
+    displayName: null,
+    role: null
   },
   mutations: {
     addProducts (state, payload) {
@@ -27,6 +28,12 @@ export default new Vuex.Store({
     },
     unsetDisplayName (state) {
       state.displayName = null
+    },
+    setRole(state, payload) {
+      state.role = payload
+    },
+    unsetRole(state) {
+      state.role = null
     }
   }, 
   getters: {
@@ -47,6 +54,12 @@ export default new Vuex.Store({
     },
     unsetDisplayName(context){
       context.commit('unsetDisplayName')
+    },
+    setRole(context, payload){
+      context.commit('setRole', payload)
+    },
+    unsetRole(context){
+      context.commit('unsetRole')
     }
   }
 })

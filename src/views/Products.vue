@@ -4,7 +4,7 @@
       <v-layout row wrap align-center>
         <v-flex xs12 md3 offset-sm1 v-for="product in products" :key="product.id">
           <v-card>
-            <v-img src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" height="150px"></v-img>
+            <v-img :src="product.images[0]" height="150px"></v-img>
 
             <v-card-title primary-title>
               <div>
@@ -46,7 +46,8 @@ export default {
               id: doc.id,
               name: doc.data().name,
               price: doc.data().price,
-              stock: doc.data().stock
+              stock: doc.data().stock,
+              images: doc.data().images
             };
 
             this.products.push(data);
