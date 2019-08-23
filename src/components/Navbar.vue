@@ -30,6 +30,7 @@
                   </v-btn>
                 </v-list-tile-action>
                 <v-list-tile-title>{{product.name}}</v-list-tile-title>
+                <v-list-tile-title>₹{{product.price}}</v-list-tile-title>
               </v-list-tile>
             </v-list>
 

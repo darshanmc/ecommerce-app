@@ -47,7 +47,9 @@ export default {
               name: doc.data().name,
               price: doc.data().price,
               stock: doc.data().stock,
-              images: doc.data().images
+              description: doc.data().description,
+              images: doc.data().images,
+              qty: 1
             };
 
             this.products.push(data);
