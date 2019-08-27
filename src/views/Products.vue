@@ -8,7 +8,9 @@
 
             <v-card-title primary-title>
               <div>
+                <router-link :to="{ name : 'productdetail', params : { product_slug : product.slug}}">
                 <div class="headline">{{ product.name }}</div>
+                 </router-link>
                 <span class="grey--text">Rs. {{ product.price }}</span>
                 <div class="grey--text">Remaining: {{ product.stock }}</div>
               </div>
@@ -49,6 +51,7 @@ export default {
               stock: doc.data().stock,
               description: doc.data().description,
               images: doc.data().images,
+              slug: doc.data().slug,
               qty: 1
             };
 

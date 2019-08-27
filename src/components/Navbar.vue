@@ -1,7 +1,13 @@
 <template>
   <div>
     <v-toolbar app>
-      <v-toolbar-title>e-commerce</v-toolbar-title>
+      <v-img
+      class="mx-2"
+      src="https://firebasestorage.googleapis.com/v0/b/ecommerce-61d0d.appspot.com/o/app%2Flogo.png?alt=media&token=0d673cdb-8d4a-4709-be9a-37adddb5b685"
+      max-height="60"
+      max-width="200"
+      contain
+     ></v-img>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
         <v-menu v-model="menu" :close-on-content-click="false" :nudge-width="200" offset-x>

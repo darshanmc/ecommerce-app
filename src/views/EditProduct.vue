@@ -42,21 +42,16 @@
             <v-icon right dark>cloud_upload</v-icon>
           </v-btn>
         </v-card-actions>
-        
+
         <v-card-actions>
           <v-btn :disabled="!imageUploaded" color="blue darken-1" text @click="save()">Save</v-btn>
         </v-card-actions>
-
       </v-form>
     </v-card>
   </div>
 </template>
 
 <script>
-import firebase from "firebase";
-import { setTimeout } from 'timers';
-import slugify from 'slugify'
-
 export default {
   data() {
     return {
@@ -65,7 +60,6 @@ export default {
       price: null,
       quantity: null,
       description: null,
-      slug: null,
       files: [],
       fileNames: null,
       textFieldRules: [v => !!v || "This value is required"],
@@ -187,6 +181,3 @@ export default {
   }
 };
 </script>
-
-<style>
-</style>
