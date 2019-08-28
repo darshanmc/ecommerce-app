@@ -2,12 +2,12 @@
   <div>
     <v-toolbar app>
       <v-img
-      class="mx-2"
-      src="https://firebasestorage.googleapis.com/v0/b/ecommerce-61d0d.appspot.com/o/app%2Flogo.png?alt=media&token=0d673cdb-8d4a-4709-be9a-37adddb5b685"
-      max-height="60"
-      max-width="200"
-      contain
-     ></v-img>
+        class="mx-2 logo"
+        src="https://firebasestorage.googleapis.com/v0/b/ecommerce-61d0d.appspot.com/o/app%2Flogo.png?alt=media&token=0d673cdb-8d4a-4709-be9a-37adddb5b685"
+        max-height="60"
+        max-width="200"
+        contain
+      ></v-img>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
         <v-menu v-model="menu" :close-on-content-click="false" :nudge-width="200" offset-x>
@@ -76,7 +76,13 @@
               <v-text-field v-model="firstName" label="First Name" :rules="firstNameRules" required></v-text-field>
               <v-text-field v-model="lastName" label="Last Name" :rules="lastNameRules" required></v-text-field>
               <v-text-field v-model="email" label="Email" :rules="emailRules" required></v-text-field>
-              <v-text-field v-model="password" label="Password" type="password" :rules="passwordRules" required></v-text-field>
+              <v-text-field
+                v-model="password"
+                label="Password"
+                type="password"
+                :rules="passwordRules"
+                required
+              ></v-text-field>
               <v-alert v-if="feedback" :value="true" type="error">{{feedback}}</v-alert>
             </v-form>
           </v-container>
@@ -84,7 +90,12 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="blue darken-1" :disabled="disabled" @click="switchToLogin()">Login</v-btn>
-            <v-btn :loading="signUpLoading" :disabled="disabled" color="blue darken-1" @click="signUp()">Signup</v-btn>
+            <v-btn
+              :loading="signUpLoading"
+              :disabled="disabled"
+              color="blue darken-1"
+              @click="signUp()"
+            >Signup</v-btn>
           </v-card-actions>
         </v-card>
 
@@ -113,7 +124,12 @@
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn :loading="loginLoading" :disabled="disabled" color="blue darken-1" @click="loginUser()">Login</v-btn>
+            <v-btn
+              :loading="loginLoading"
+              :disabled="disabled"
+              color="blue darken-1"
+              @click="loginUser()"
+            >Login</v-btn>
             <v-btn color="blue darken-1" :disabled="disabled" @click="switchToSignUp()">Signup</v-btn>
           </v-card-actions>
         </v-card>
@@ -152,7 +168,7 @@ export default {
   created() {
     let usersRef = db.collection("users");
     firebase.auth().onAuthStateChanged(() => {
-      this.user = firebase.auth().currentUser
+      this.user = firebase.auth().currentUser;
       if (this.user) {
         usersRef
           .where("user_id", "==", this.user.uid)
@@ -171,8 +187,8 @@ export default {
       this.$store.dispatch("removeCartItem", product);
     },
     cancel() {
-      this.dialog = false
-      this.feedback = null
+      this.dialog = false;
+      this.feedback = null;
       this.$refs.form.reset();
       this.$refs.form.resetValidation();
     },
@@ -186,39 +202,42 @@ export default {
     },
     signUp() {
       if (this.email && this.password && this.firstName && this.lastName) {
-        this.signUpLoading = true
-        this.disabled = true
-        let userRef = db.collection("users")
+        this.signUpLoading = true;
+        this.disabled = true;
+        let userRef = db.collection("users");
         firebase
           .auth()
           .createUserWithEmailAndPassword(this.email, this.password)
           .then(cred => {
             this.user = cred.user;
-            userRef.add({
+            userRef
+              .add({
                 first_name: this.firstName,
                 last_name: this.lastName,
                 user_id: cred.user.uid
-            }).then(() => {
-              this.$store.dispatch("setDisplayName", this.firstName)
-              this.feedback = null
-              this.dialog = false
-              this.$refs.form.resetValidation();
-              this.$refs.form.reset();
-              this.signUpLoading = false
-              this.disabled = false
-            }).catch(err => {
-              this.feedback = err.message
-              this.dialog = true
-              this.loginLoading = false
-              this.disabled = false
-            })
+              })
+              .then(() => {
+                this.$store.dispatch("setDisplayName", this.firstName);
+                this.feedback = null;
+                this.dialog = false;
+                this.$refs.form.resetValidation();
+                this.$refs.form.reset();
+                this.signUpLoading = false;
+                this.disabled = false;
+              })
+              .catch(err => {
+                this.feedback = err.message;
+                this.dialog = true;
+                this.loginLoading = false;
+                this.disabled = false;
+              });
           })
-          .catch((err) => {
-            this.feedback = err.message
-            this.dialog = true
-            this.loginLoading = false
-            this.disabled = false
-          })   
+          .catch(err => {
+            this.feedback = err.message;
+            this.dialog = true;
+            this.loginLoading = false;
+            this.disabled = false;
+          });
       } else {
         if (this.$refs.form.validate()) {
           this.snackbar = true;
@@ -227,8 +246,8 @@ export default {
     },
     loginUser() {
       if (this.email && this.password) {
-        this.loginLoading = true
-        this.disabled = true
+        this.loginLoading = true;
+        this.disabled = true;
         this.$refs.form.resetValidation();
         let usersRef = db.collection("users");
 
@@ -248,26 +267,26 @@ export default {
               .then(snapshot => {
                 snapshot.forEach(doc => {
                   this.$store.dispatch("setDisplayName", doc.data().first_name);
-                  let role = doc.data().role
+                  let role = doc.data().role;
                   if (role) {
-                    this.$store.dispatch("setRole", role)
+                    this.$store.dispatch("setRole", role);
                   }
-                  this.feedback = null
-                  this.loginLoading = false
-                  this.disabled = false
+                  this.feedback = null;
+                  this.loginLoading = false;
+                  this.disabled = false;
                 });
               })
               .catch(err => {
-                this.feedback = err.message
-                this.loginLoading = false
-                this.disabled = false
-              })
+                this.feedback = err.message;
+                this.loginLoading = false;
+                this.disabled = false;
+              });
           })
           .catch(err => {
             this.feedback = err.message;
             this.$refs.form.reset();
-            this.loginLoading = false
-            this.disabled = false
+            this.loginLoading = false;
+            this.disabled = false;
           });
       } else {
         if (this.$refs.form.validate()) {
@@ -278,7 +297,7 @@ export default {
     logout() {
       firebase.auth().signOut();
       this.$store.dispatch("unsetDisplayName");
-      this.$store.dispatch("unsetRole")
+      this.$store.dispatch("unsetRole");
     }
   },
   computed: {
@@ -290,12 +309,12 @@ export default {
     },
     displayName() {
       return this.$store.state.displayName;
-    }, 
+    },
     isAdmin() {
       let isAdmin = false;
       let role = this.$store.state.role;
-      if (role === 'admin'){
-        isAdmin = true
+      if (role === "admin") {
+        isAdmin = true;
       }
       return isAdmin;
     }

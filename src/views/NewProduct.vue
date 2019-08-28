@@ -8,9 +8,9 @@
       <v-form ref="form" lazy-validation>
         <v-card-text>
           <v-text-field label="Product Name" v-model="productName" :rules="textFieldRules" required></v-text-field>
-          <v-text-field label="Category" v-model="category" :rules="textFieldRules" required></v-text-field>
-          <v-text-field label="Price" v-model="price" :rules="textFieldRules" required></v-text-field>
-          <v-text-field label="Quantity" v-model="quantity" :rules="textFieldRules" required></v-text-field>
+          <v-select :items="categories" v-model="category" item-text="cat" item-value="abbr" label="Category"></v-select>
+          <v-text-field label="Price" v-model="price" :rules="textFieldRules" required mask="######"></v-text-field>
+          <v-text-field label="Quantity" v-model="quantity" :rules="textFieldRules" required mask="##"></v-text-field>
           <v-text-field label="Description" v-model="description" :rules="textFieldRules" required></v-text-field>
           <label for="primaryimage">Images</label>
           <input
@@ -24,7 +24,7 @@
           <v-alert v-if="feedback" :value="true" type="error">{{feedback}}</v-alert>
         </v-card-text>
 
-        <v-container v-if="uploaded">
+        <v-container v-if="imageUploaded">
           <v-layout row wrap>
             <v-flex md2 sm2 xs3 v-for="(img, index) in imageUrls" :key="index">
               <v-img :src="img">
@@ -45,6 +45,7 @@
         
         <v-card-actions>
           <v-btn :disabled="!imageUploaded" color="blue darken-1" text @click="save()">Save</v-btn>
+          <v-btn @click="clear()">Clear</v-btn>
         </v-card-actions>
 
       </v-form>
@@ -54,14 +55,13 @@
 
 <script>
 import firebase from "firebase";
-import { setTimeout } from 'timers';
 import slugify from 'slugify'
 
 export default {
   data() {
     return {
       productName: null,
-      category: null,
+      category: { cat: 'Saree', abbr: 'saree' },
       price: null,
       quantity: null,
       description: null,
@@ -71,16 +71,31 @@ export default {
       textFieldRules: [v => !!v || "This value is required"],
       feedback: null,
       imageUrls: [],
-      uploaded: false,
-      loading: false
+      loading: false,
+      categories: [
+        {cat: 'Saree', abbr: 'saree'}
+      ]
     };
   },
   computed : {
     imageUploaded ()  {
-      return this.uploaded
+      if (this.imageUrls.length === 0) {
+        return false;
+      } else if (this.imageUrls.length === this.files.length){
+        return true;
+      } else {
+        return false;
+      }
     },
     isLoading() {
-      return this.loading
+      if (!this.loading){
+        return this.loading;
+      } else {
+        if (this.imageUploaded){
+          return false;
+        } 
+        return this.loading
+      }
     } 
   },
   methods: {
@@ -139,15 +154,9 @@ export default {
         this.feedback = 'Please select at least one image to upload'
       } else {
         this.loading = true
-
         this.files.forEach(file => {
           this.upload(file);
         });
-
-        setTimeout(() => {
-          this.uploaded = true
-          this.loading = false
-        }, 2000)
       }
     },
     saveProduct() {
@@ -163,26 +172,36 @@ export default {
           price: this.price,
           stock: this.quantity,
           description: this.description,
-          category: this.category,
+          category: this.category.abbr,
           images: this.imageUrls,
           slug: this.slug
         })
         .then(() => {
           this.feedback = null;
           this.imageUrls = []
-          this.uploaded = false
+          this.loading = false
           this.$refs.form.reset();
           document.getElementById("primaryimage").value = "";
         });
     },
-    removeImage(imageUrl) {
+    removeImage(imageUrl) {  
       this.imageUrls = this.imageUrls.filter((value) => {
         return value != imageUrl;
       })
+      this.files.pop();
+
       if (this.imageUrls.length === 0){
         this.uploaded = false
         document.getElementById("primaryimage").value = "";
       }
+    },
+    clear() {
+      this.feedback = null;
+      this.imageUrls = []
+      this.files = []
+      this.loading = false
+      this.$refs.form.reset();
+      document.getElementById("primaryimage").value = "";
     }
   }
 };
