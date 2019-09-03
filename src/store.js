@@ -9,7 +9,8 @@ export default new Vuex.Store({
     cartItem: 0,
     productsInCart: [],
     displayName: null,
-    role: null
+    role: null,
+    isAdmin : false
   },
   mutations: {
     addProducts (state, payload) {
@@ -34,10 +35,26 @@ export default new Vuex.Store({
     },
     unsetRole(state) {
       state.role = null
+      state.isAdmin = false
+    },
+    deleteProduct (state, payload) {
+      state.products = state.products.filter(product => {
+        if (payload.id != product.id){
+          return true;
+        }
+      })
+    },
+    addNewProduct (state, payload){
+      state.products.push(payload);
     }
   }, 
   getters: {
-
+    isAdmin: state => {
+      if (state.role === "admin") {
+        state.isAdmin = true;
+      }
+      return state.isAdmin;
+    }
   },
   actions: {
     addProducts (context, payload) {
@@ -60,6 +77,12 @@ export default new Vuex.Store({
     },
     unsetRole(context){
       context.commit('unsetRole')
+    },
+    deleteProduct (context, payload){
+      context.commit('deleteProduct', payload)
+    },
+    addNewProduct (context, payload){
+      context.commit('addNewProduct', payload)
     }
   }
 })

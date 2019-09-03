@@ -311,12 +311,7 @@ export default {
       return this.$store.state.displayName;
     },
     isAdmin() {
-      let isAdmin = false;
-      let role = this.$store.state.role;
-      if (role === "admin") {
-        isAdmin = true;
-      }
-      return isAdmin;
+      return this.$store.getters.isAdmin;
     }
   }
 };
