@@ -2,7 +2,7 @@
   <div>
     <v-card>
       <v-card-title>
-        <span class="headline">Add/Edit a Product</span>
+        <span class="headline">Add a Product</span>
       </v-card-title>
 
       <v-form ref="form" lazy-validation>

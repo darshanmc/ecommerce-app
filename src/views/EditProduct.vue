@@ -2,7 +2,7 @@
   <div>
     <v-card>
       <v-card-title>
-        <span class="headline">Add new product</span>
+        <span class="headline">Edit a product</span>
       </v-card-title>
 
       <v-form ref="form" lazy-validation>
@@ -76,6 +76,20 @@ export default {
     isLoading() {
       return this.loading
     } 
+  },
+  created() {
+      let ref = db.collection('products').where('slug','==', this.$route.params.product_slug)
+      ref
+      .get()
+      .then(snapshot => {
+          snapshot.forEach(doc => {
+              this.product.imageUrls = doc.data().images
+              this.product.name = doc.data().name
+              this.product.stock = doc.data().stock
+              this.product.description = doc.data().description
+              this.product.price = doc.data().price
+          })
+      })
   },
   methods: {
     detectFiles(fileList) {

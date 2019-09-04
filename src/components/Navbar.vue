@@ -32,11 +32,11 @@
               <v-list-tile v-for="product in products" :key="product.id">
                 <v-list-tile-action>
                   <v-btn icon v-on:click="removeItem(product)">
-                    <v-icon>delete</v-icon>
+                    <v-icon color="red">delete</v-icon>
                   </v-btn>
                 </v-list-tile-action>
                 <v-list-tile-title>{{product.name}}</v-list-tile-title>
-                <v-list-tile-title>₹{{product.price}}</v-list-tile-title>
+                <v-list-tile-title>₹{{product.price * product.qty}}</v-list-tile-title>
               </v-list-tile>
             </v-list>
 
@@ -175,8 +175,24 @@ export default {
           .get()
           .then(snapshot => {
             snapshot.forEach(doc => {
-              this.$store.dispatch("setDisplayName", doc.data().first_name);
-              this.$store.dispatch("setRole", doc.data().role);
+              var payload = {}
+              payload.displayName = doc.data().first_name;
+              payload.role = doc.data().role;
+              payload.userId = this.user.uid;
+              
+              db.collection("cart")
+              .where("user_id", "==", this.user.uid)
+              .get()
+              .then(snapshot => {
+                if (!snapshot.empty){
+                  snapshot.forEach(doc => {
+                    payload.productsInCart = doc.data().products_in_cart;
+                  })
+                  this.$store.dispatch("login", payload);
+                } else {
+                  this.$store.dispatch("login", payload);
+                }
+              })
             });
           });
       }
@@ -217,7 +233,6 @@ export default {
                 user_id: cred.user.uid
               })
               .then(() => {
-                this.$store.dispatch("setDisplayName", this.firstName);
                 this.feedback = null;
                 this.dialog = false;
                 this.$refs.form.resetValidation();
@@ -264,17 +279,10 @@ export default {
             usersRef
               .where("user_id", "==", cred.user.uid)
               .get()
-              .then(snapshot => {
-                snapshot.forEach(doc => {
-                  this.$store.dispatch("setDisplayName", doc.data().first_name);
-                  let role = doc.data().role;
-                  if (role) {
-                    this.$store.dispatch("setRole", role);
-                  }
-                  this.feedback = null;
-                  this.loginLoading = false;
-                  this.disabled = false;
-                });
+              .then(() => {
+                this.feedback = null;
+                this.loginLoading = false;
+                this.disabled = false;
               })
               .catch(err => {
                 this.feedback = err.message;
@@ -296,8 +304,7 @@ export default {
     },
     logout() {
       firebase.auth().signOut();
-      this.$store.dispatch("unsetDisplayName");
-      this.$store.dispatch("unsetRole");
+      this.$store.dispatch("logout")
     }
   },
   computed: {

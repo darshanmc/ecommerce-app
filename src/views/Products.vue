@@ -20,7 +20,7 @@
 
             <v-card-actions>
               <v-btn icon large v-on:click="addItem(product)">
-                <v-icon>add_shopping_cart</v-icon>
+                <v-icon color="#ff9f00">add_shopping_cart</v-icon>
               </v-btn>
               <v-spacer></v-spacer>
               <v-btn v-if="isAdmin" icon large @click="confirmation (product)">

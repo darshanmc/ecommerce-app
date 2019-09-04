@@ -3,8 +3,8 @@
     <h2 class="display-2 mb-4">Shopping Cart</h2>
 
     <v-list two-line>
-      <template v-for="(product, index) in products">
-        <v-list-tile :key="product.id" avatar>
+      <template>
+        <v-list-tile v-for="product in products" :key="product.id" avatar>
           <v-list-tile-avatar>
             <img :src="product.images[0]">
           </v-list-tile-avatar>
@@ -19,7 +19,7 @@
           </v-list-tile>
 
           <v-list-tile-action>
-            <v-text-field label="Quantity" reverse :value="product.qty" mask="#"></v-text-field>
+            <v-text-field label="Quantity" reverse :value="product.qty" mask="#" :id="product.id" @blur="changeQuantity(product.id)"></v-text-field>
           </v-list-tile-action>
 
           <v-list-tile>
@@ -33,7 +33,6 @@
           </v-list-tile-action>
         </v-list-tile>
 
-        <v-divider v-if="index + 1 < products.length" :key="index"></v-divider>
       </template>
       <v-divider></v-divider>
        <v-list-tile>
@@ -44,7 +43,6 @@
 
     <v-container>
       <v-btn color="success" larger style="float: right;">Place order</v-btn>
-      <v-btn color="success" larger style="float: right;">Update Cart</v-btn>
     </v-container>
   </v-container>
 
@@ -64,7 +62,7 @@ export default {
     cartTotal () {
       var tot = 0;
       this.$store.state.productsInCart.forEach(product => {
-        tot += parseFloat(product.price);
+        tot += parseFloat(product.price * product.qty);
       });
       return tot;
     }
@@ -75,6 +73,13 @@ export default {
     },
     updateQuantity(product) {
       product.qty = this.qty;
+    },
+    changeQuantity(pid) {
+      let qty = document.getElementById(pid).value;
+      this.$store.dispatch("changeQuantity", {
+        id : pid,
+        qty : qty
+      })
     }
   }
 };
