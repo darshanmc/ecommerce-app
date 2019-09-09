@@ -179,7 +179,8 @@ export default {
               payload.displayName = doc.data().first_name;
               payload.role = doc.data().role;
               payload.userId = this.user.uid;
-              
+              payload.productsInCart = [];
+
               db.collection("cart")
               .where("user_id", "==", this.user.uid)
               .get()
@@ -189,7 +190,7 @@ export default {
                     payload.productsInCart = doc.data().products_in_cart;
                   })
                   this.$store.dispatch("login", payload);
-                } else {
+                } else {    
                   this.$store.dispatch("login", payload);
                 }
               })

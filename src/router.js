@@ -7,6 +7,9 @@ import Cart from './views/Cart.vue'
 import Dashboard from './views/Dashboard.vue'
 import NewProduct from './views/NewProduct.vue'
 import ProductDetail from './views/ProductDetail.vue'
+import Checkout from './views/Checkout.vue'
+import OrderSummary from './views/OrderSummary.vue'
+import OrderDetail from './views/OrderDetail.vue'
 
 Vue.use(Router)
 
@@ -48,6 +51,21 @@ export default new Router({
       path: '/detail/:product_slug',
       name: 'productdetail',
       component: ProductDetail
+    },
+    {
+      path: '/checkout',
+      name: 'checkout',
+      component: Checkout
+    },
+    {
+      path: '/summary',
+      name: 'ordersummary',
+      component: OrderSummary
+    },
+    {
+      path: '/orderdetail',
+      name: 'orderdetail',
+      component: OrderDetail
     }
   ]
 })

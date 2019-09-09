@@ -1,6 +1,8 @@
 <template>
   <div class="about">
     <v-container fluid grid-list-md>
+      <v-alert v-if="feedback" :value="true" type="error">{{ feedback }}</v-alert>
+
       <v-layout row wrap align-center>
         <v-flex xs12 md3 offset-sm1 v-for="product in displayProducts" :key="product.id">
           <v-card>
@@ -19,7 +21,7 @@
             </v-card-title>
 
             <v-card-actions>
-              <v-btn icon large v-on:click="addItem(product)">
+              <v-btn :disabled="product.qty > product.stock" icon large v-on:click="addItem(product)">
                 <v-icon color="#ff9f00">add_shopping_cart</v-icon>
               </v-btn>
               <v-spacer></v-spacer>
@@ -58,7 +60,8 @@ export default {
     return {
       products: [],
       dialog: false,
-      prod: null
+      prod: null,
+      feedback : null
     };
   },
   methods: {

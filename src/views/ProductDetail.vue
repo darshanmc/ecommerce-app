@@ -37,7 +37,7 @@
           </v-card-text>
         </v-card>
         <br>
-        <v-btn @click="addItem()">
+        <v-btn :disabled="product.qty > product.stock" @click="addItem()">
           Add to Cart
           <v-icon right color="#ff9f00">add_shopping_cart</v-icon>
         </v-btn>

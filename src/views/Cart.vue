@@ -2,6 +2,8 @@
   <v-container>
     <h2 class="display-2 mb-4">Shopping Cart</h2>
 
+    <v-alert v-for="(feedback, index) in messages" :key="index" :value="true" type="error">{{ feedback }}</v-alert>
+
     <v-list two-line>
       <template>
         <v-list-tile v-for="product in products" :key="product.id" avatar>
@@ -11,7 +13,7 @@
 
           <v-list-tile-content>
             <v-list-tile-title v-html="product.name"></v-list-tile-title>
-            <v-list-tile-sub-title v-html="product.name"></v-list-tile-sub-title>
+            <v-list-tile-sub-title v-html="product.description"></v-list-tile-sub-title>
           </v-list-tile-content>
 
           <v-list-tile>
@@ -19,7 +21,7 @@
           </v-list-tile>
 
           <v-list-tile-action>
-            <v-text-field label="Quantity" reverse :value="product.qty" mask="#" :id="product.id" @blur="changeQuantity(product.id)"></v-text-field>
+            <v-text-field label="Quantity" reverse :value="product.qty" mask="#" :id="product.id" @blur="changeQuantity(product)"></v-text-field>
           </v-list-tile-action>
 
           <v-list-tile>
@@ -42,7 +44,9 @@
     </v-list>
 
     <v-container>
-      <v-btn color="success" larger style="float: right;">Place order</v-btn>
+      <router-link :to="{ name: 'checkout'}">
+        <v-btn :disabled="!msg" color="success" larger style="float: right;">Checkout</v-btn>
+      </router-link>  
     </v-container>
   </v-container>
 
@@ -52,12 +56,19 @@
 export default {
   data() {
     return {
-      qty: 1
+      qty: 1,
+      feedbacks : []
     };
   },
   computed : {
     products () {
       return this.$store.state.productsInCart
+    },
+    msg () {
+      return this.feedbacks.length === 0;
+    },
+    messages () {
+      return this.feedbacks;
     },
     cartTotal () {
       var tot = 0;
@@ -74,13 +85,29 @@ export default {
     updateQuantity(product) {
       product.qty = this.qty;
     },
-    changeQuantity(pid) {
-      let qty = document.getElementById(pid).value;
-      this.$store.dispatch("changeQuantity", {
-        id : pid,
-        qty : qty
+    changeQuantity(product) {
+      let qty = document.getElementById(product.id).value;
+      
+        this.$store.dispatch("changeQuantity", {
+          id : product.id,
+          qty : qty
+        });
+      
+      this.validate();
+    },
+    validate () {
+      this.feedbacks = [];
+      let products = this.$store.state.productsInCart;
+      products.forEach(product => {
+        if (!this.$store.getters.quantityCheck({ qty : product.qty, stock : product.stock })) {
+          this.feedbacks.push(`${product.qty} items are not available for ${product.name}!`);
+        }
       })
+      return this.feedbacks;
     }
+  },
+  created () {
+    this.validate();
   }
 };
 </script>
