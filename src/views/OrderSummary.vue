@@ -67,7 +67,7 @@
     
     <v-layout> 
         <v-flex md2>
-        <v-btn color="success" large style="float: left; margin: auto; margin-top: 10px" @click="placeOrder()">Place Order</v-btn>
+        <v-btn :loading="loading" color="success" large style="float: left; margin: auto; margin-top: 10px" @click="placeOrder()">Place Order</v-btn>
       </v-flex>
     </v-layout>
 
@@ -81,7 +81,8 @@ export default {
   data() {
     return {
       productsInCart : [],
-      shippingAddress : {}
+      shippingAddress : {},
+      loading : false
     };
   },
   methods : {
@@ -121,7 +122,7 @@ export default {
       this.productsInCart = this.$store.state.productsInCart;
       this.shippingAddress = this.$store.state.address;
       var userId = this.$store.state.userId;
-      
+      this.loading = true;
       if (this.productsInCart.lenght !== 0 && Object.keys(this.shippingAddress).length !== 0) {
         var orderId = Math.random().toString(10).substr(2, 6); 
         
@@ -143,7 +144,11 @@ export default {
 
           // redirect to next page
           this.$router.push({name : "orderdetail"})
+
+          this.loading = false;
         })
+      } else {
+        this.loading = false;
       }
     }
   },
