@@ -5,6 +5,9 @@
     <v-alert v-for="(feedback, index) in messages" :key="index" :value="true" type="error">{{ feedback }}</v-alert>
 
     <v-list two-line>
+      <v-list-tile v-if="!hasProducts">
+            <h3>Your cart is empty!</h3>
+      </v-list-tile>
       <template>
         <v-list-tile v-for="product in products" :key="product.id" avatar>
           <v-list-tile-avatar>
@@ -45,7 +48,7 @@
 
     <v-container>
       <router-link :to="{ name: 'checkout'}">
-        <v-btn :disabled="!msg" color="success" larger style="float: right;">Checkout</v-btn>
+        <v-btn :disabled="!checkoutEnabled" color="success" larger style="float: right;">Checkout</v-btn>
       </router-link>  
     </v-container>
   </v-container>
@@ -64,8 +67,11 @@ export default {
     products () {
       return this.$store.state.productsInCart
     },
-    msg () {
-      return this.feedbacks.length === 0;
+    hasProducts() {
+      return this.$store.state.productsInCart.length > 0;
+    },
+    checkoutEnabled () {
+      return this.feedbacks.length === 0 && this.$store.state.productsInCart.length > 0;
     },
     messages () {
       return this.feedbacks;
