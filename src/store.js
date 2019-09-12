@@ -40,11 +40,15 @@ export default new Vuex.Store({
     role: null,
     isAdmin: false,
     address : {},
-    orderNumber: null
+    orderNumber: null,
+    orders: []
   },
   mutations: {
     addProducts(state, payload) {
-      this.products = payload;
+      state.products = payload;
+    },
+    loadOrders(state, payload){
+      state.orders = payload;
     },
     addCartItem(state, payload) {
       var productExists = false;
@@ -138,6 +142,9 @@ export default new Vuex.Store({
   actions: {
     addProducts(context, payload) {
       context.commit('addProducts', payload);
+    },
+    loadOrders(context, payload){
+      context.commit('loadOrdes', payload)
     },
     addCartItem(context, payload) {
       context.commit('addCartItem', payload)

@@ -49,6 +49,7 @@
 
         <!-- <v-btn flat router to="/">Home</v-btn> -->
         <v-btn v-if="!displayName" flat router to="/about">About</v-btn>
+        <v-btn v-if="isAdmin" flat router to="/dashboard">Dashboard</v-btn>
         <v-btn flat router to="/products">Products</v-btn>
         <v-btn v-if="displayName" flat>Hello {{ displayName }}</v-btn>
         <v-btn v-if="isAdmin" fab dark color="indigo" router to="/newproduct">

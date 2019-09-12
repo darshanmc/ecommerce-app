@@ -130,7 +130,8 @@ export default {
           user_id : userId,
           products : this.productsInCart,
           address : this.shippingAddress,
-          order_id : orderId
+          order_id : orderId,
+          status : "yellow"
         }).then( () => {
           // update db products qty
           // update local state products qty
