@@ -132,10 +132,17 @@ export default {
         }
       });
     },
-    upload(file) {
+    getProductName () {
+      if (this.productName) {
+        return this.productName;
+      } else {
+        return Math.random().toString(10).substr(2, 3); 
+      }
+    },
+    upload(file, productPath) {
       firebase
         .storage()
-        .ref("products/" + file.name)
+        .ref("products/" + productPath + '/' +file.name)
         .put(file)
         .then(uploadTask => {
           uploadTask.ref
@@ -177,9 +184,10 @@ export default {
       if (this.files.length === 0) {
         this.feedback = "Please select at least one image to upload";
       } else {
+        var productPath = this.getProductName();
         this.loading = true;
         this.files.forEach(file => {
-          this.upload(file);
+          this.upload(file, productPath);
         });
       }
     },

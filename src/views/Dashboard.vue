@@ -4,6 +4,9 @@
       <h1>Orders</h1>
     </div>
     <br />
+    <div v-if="displayMessage" class="header">
+      <h1>No orders yet!</h1>
+    </div>
     <v-expansion-panel>
       <v-expansion-panel-content v-for="(order, index) in orders" :key="index">
         <template v-slot:actions>
@@ -190,6 +193,11 @@ export default {
           });
         })
         .then(() => this.$store.dispatch("loadOrders", this.orders));
+    }
+  },
+  computed : {
+    displayMessage () {
+      return this.orders.length === 0;
     }
   }
 };
