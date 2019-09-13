@@ -28,11 +28,6 @@ export default new Router({
       component: About
     },
     {
-      path: '/products',
-      name: 'products',
-      component: Products
-    },
-    {
       path: '/carts',
       name: 'cart',
       component: Cart

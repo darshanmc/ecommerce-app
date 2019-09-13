@@ -29,6 +29,12 @@
             required
             mask="##"
           ></v-text-field>
+          <v-text-field
+            label="Product Code"
+            v-model="code"
+            :rules="textFieldRules"
+            required
+          ></v-text-field>
           <v-text-field label="Description" v-model="description" :rules="textFieldRules" required></v-text-field>
           <label for="primaryimage">Images</label>
           <input
@@ -71,7 +77,8 @@
 </template>
 
 <script>
-import firebase from "firebase";
+import firebase from "firebase/app";
+import 'firebase/storage';
 import slugify from "slugify";
 
 export default {
@@ -82,6 +89,7 @@ export default {
       price: null,
       quantity: null,
       description: null,
+      code: null,
       slug: null,
       files: [],
       fileNames: null,
@@ -150,7 +158,8 @@ export default {
         !this.category ||
         !this.price ||
         !this.description ||
-        !this.quantity
+        !this.quantity ||
+        !this.code
       ) {
         if (this.$refs.form.validate()) {
           this.snackbar = true;
@@ -190,6 +199,7 @@ export default {
       product.category = this.category.abbr;
       product.images = this.imageUrls;
       product.slug = this.slug;
+      product.code = this.code;
 
       productRef
         .add(product)

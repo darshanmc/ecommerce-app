@@ -50,7 +50,7 @@
         <!-- <v-btn flat router to="/">Home</v-btn> -->
         <v-btn v-if="!displayName" flat router to="/about">About</v-btn>
         <v-btn v-if="isAdmin" flat router to="/dashboard">Dashboard</v-btn>
-        <v-btn flat router to="/products">Products</v-btn>
+        <v-btn flat router to="/">Products</v-btn>
         <v-btn v-if="displayName" flat>Hello {{ displayName }}</v-btn>
         <v-btn v-if="isAdmin" fab dark color="indigo" router to="/newproduct">
           <v-icon dark>add</v-icon>
@@ -141,7 +141,7 @@
 
 
 <script>
-import firebase from "firebase";
+import firebase from "firebase/app";
 import db from "../views/fireconf";
 
 export default {
@@ -267,8 +267,8 @@ export default {
         this.disabled = true;
         this.$refs.form.resetValidation();
         let usersRef = db.collection("users");
-
-        firebase
+          
+          firebase
           .auth()
           .signInWithEmailAndPassword(this.email, this.password)
           .then(cred => {

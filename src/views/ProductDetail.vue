@@ -17,7 +17,9 @@
         <v-card color="#fafafa">
           <v-card-text>
            <u> Description: </u> <br>
-           {{ product.description }}
+           {{ product.description }} <br> <br>
+           <u>Product Code:</u> <br>
+           {{ product.code }}
           </v-card-text>
         </v-card>
         <br>
@@ -86,6 +88,7 @@ export default {
           this.product.description = doc.data().description;
           this.product.price = doc.data().price;
           this.product.slug = doc.data().slug;
+          this.product.code = doc.data().code;
         });
       }
       

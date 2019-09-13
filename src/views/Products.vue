@@ -53,7 +53,8 @@
 
 <script>
 import db from "./fireconf";
-import firebase from "firebase";
+import firebase from "firebase/app";
+import 'firebase/storage'
 
 export default {
   data() {
@@ -78,6 +79,7 @@ export default {
               description: doc.data().description,
               images: doc.data().images,
               slug: doc.data().slug,
+              code: doc.data().code,
               qty: 1
             };
 

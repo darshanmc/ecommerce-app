@@ -144,7 +144,7 @@ export default new Vuex.Store({
       context.commit('addProducts', payload);
     },
     loadOrders(context, payload){
-      context.commit('loadOrdes', payload)
+      context.commit('loadOrders', payload)
     },
     addCartItem(context, payload) {
       context.commit('addCartItem', payload)
