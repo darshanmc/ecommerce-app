@@ -25,6 +25,13 @@
                 <v-icon color="#ff9f00">add_shopping_cart</v-icon>
               </v-btn>
               <v-spacer></v-spacer>
+              <router-link
+                  :to="{ name : 'editproduct', params : { product_slug : product.slug}}"
+                >
+                <v-btn v-if="isAdmin" icon large>
+                  <v-icon color="blue">edit</v-icon>
+                </v-btn>
+              </router-link>
               <v-btn v-if="isAdmin" icon large @click="confirmation (product)">
                 <v-icon color="red">delete</v-icon>
               </v-btn>

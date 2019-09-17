@@ -80,7 +80,7 @@
 
                     <v-list-tile-content>
                       <v-list-tile-title v-html="product.name"></v-list-tile-title>
-                      <v-list-tile-sub-title v-html="product.description"></v-list-tile-sub-title>
+                      <v-list-tile-sub-title v-html="product.code"></v-list-tile-sub-title>
                     </v-list-tile-content>
 
                     <v-list-tile>₹{{product.price}}</v-list-tile>

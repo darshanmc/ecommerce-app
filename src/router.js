@@ -10,6 +10,7 @@ import ProductDetail from './views/ProductDetail.vue'
 import Checkout from './views/Checkout.vue'
 import OrderSummary from './views/OrderSummary.vue'
 import OrderDetail from './views/OrderDetail.vue'
+import EditProduct from './views/EditProduct.vue'
 
 Vue.use(Router)
 
@@ -46,6 +47,11 @@ export default new Router({
       path: '/detail/:product_slug',
       name: 'productdetail',
       component: ProductDetail
+    },
+    {
+      path: '/edit/:product_slug',
+      name: 'editproduct',
+      component: EditProduct
     },
     {
       path: '/checkout',
